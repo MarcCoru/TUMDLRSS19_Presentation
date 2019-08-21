@@ -1,0 +1,145 @@
+
+\documentclass[%
+  aspectratio=169,
+  9pt,
+  USenglish,
+  %titlegraphic, % store custom image to .images/titlegraphic
+  %affiliationintitlepagehead,
+  %progressbar,
+%   affiliation,
+]{beamer}
+%\texttt{}
+
+\usetheme{TUM}
+
+
+%\newcommand{\coorg}{Irisa}
+
+
+\setbeamertemplate{blocks}[rounded][shadow=false]
+
+\input{preamble.tex}
+
+\title{Satellite Time Series Analysis for Vegetation Modeling}
+\subtitle{TUM-DLR Summer School 2019}
+\author[M. Rußwurm, M.Körner]{Marc Rußwurm, Marco Körner}
+\institute[TUM]{Technical University of Munich, Germany\\
+                Remote Sensing Technology}
+\date{\today}
+
+\begin{document}
+\begin{frame}[t]
+  \titlepage
+\end{frame}
+
+
+\begin{frame}
+
+\frametitle{Vegetation Model}
+
+\centering
+\begin{tikzpicture}
+
+\begin{scope}[node distance=0em]
+\node(co2){$6\text{CO}_2$};
+\node[right=of co2](plus){$+$};
+\node[right=of plus](h2o){$6{\text{H}}_{2}\text{O}$};
+\node[right=1em of h2o](arrow){$\to$};
+\node[right=1em of arrow](sugar){${\text{C}}_{\text{6}}{\text{H}}_{\text{12}}{\text{O}}_{\text{6}}$};
+\node[right=of sugar](plus){$+$};
+\node[right=of plus](o2){${\text{6O}}_{\text{2}}$};
+\end{scope}
+
+\visible<2-4,10>{
+	\node[below left=of co2](annotco2){climate change};
+	\draw[annot] (annotco2) -- (co2.south);
+	
+	\node[below=of h2o](annoth2o){water/drought};
+	\draw[annot] (annoth2o) -- (h2o.south);
+	
+	\node[below=of sugar](annotsugar){biomass/crop yield};
+	\draw[annot] (annotsugar) -- (sugar.south);
+	
+	\node[below right=of o2](annoto2){atmosphere};
+	\draw[annot] (annoto2) -- (o2.south);
+}
+
+
+\visible<3->{
+	\node[fill=tumbluedark, rounded corners, font=\bfseries, text=white, inner sep=1em] at (co2){?};
+	\node[fill=tumbluedark, rounded corners, font=\bfseries, text=white, inner sep=1em] at (h2o){?};
+	\node[fill=tumbluedark, rounded corners, font=\bfseries, text=white, inner xsep=2em, inner ysep=1em] at (sugar){?};
+	\node[fill=tumbluedark, rounded corners, font=\bfseries, text=white, inner sep=1em] at (o2){?};
+}
+
+\visible<4->{
+	\node[above left=of arrow](sun) {\includegraphics[width=10mm]{images/icons/sun}};
+	\node[above right=3em and 2em of arrow](sat) {\includegraphics[width=10mm, angle=130]{images/icons/sat2}};
+	
+	\draw[-stealth] (sun) -- node[midway,sloped]{\wave} ($ (arrow)+(0,1.5em) $);
+	\draw[-stealth] ($ (arrow)+(0,1.5em) $) -- node[midway,sloped]{\wave} (sat);
+}
+
+\visible<4-5>{
+	\node[right=0em of sat](xsat){$\M{x}=(\V{x}_t,\V{x}_{t+1},\dots,\V{x}_T)$};	
+}
+
+\visible<5->{
+	\node[fit=(co2)(h2o)(sugar)(o2), fill=black, rounded corners, font=\bfseries\Large, text=white, inner sep=1em, text height=1.5ex,
+	text depth=.25ex](fveg){$f_\text{vegetation}$};
+}
+
+\visible<6->{
+	\node[right=0em of fveg, font=\Large]{$\left(\V{x}_t,\V{x}_{t+1},\dots,\V{x}_T\right)$};
+}
+
+\visible<7->{
+	\node[left=0em of fveg, font=\Large](yhat){$\hat{\V{y}}=$};
+}
+
+\visible<8->{
+	\node[left=of yhat, font=\Large](y){$\V{y}$};
+	\draw[Stealth-Stealth] (yhat) -- node[midway, above, name=loss]{$\mathcal{L}$} (y);
+	\draw[-Stealth] (loss) to[bend left] node[midway, above]{$\frac{\partial f}{\partial \mathcal{L}}$} (fveg);
+}
+
+\node[below=2em of arrow, text width=.9\textwidth] {
+	\begin{description}\setlength\itemsep{.5em}
+	\visible<6-9>{\item[\color{tumblue}Problem:] \textbf{un/self-supervised learning} of a vegetation model \textbf{is difficult}}
+	\visible<7-9>{\item[\color{tumblue}(Proxy)-Solution:] re-framing as \textbf{supervised classification} of crop type labels $\V{y} \in \{y_\text{corn},y_\text{meadow},\dots\}$}
+	\visible<9>{\item[\color{tumblue}Intuition:] A \textbf{supervised classification model} must \textbf{internalize} a learned \textbf{discriminative model} for the \textbf{vegetation}}
+	\end{description}
+};
+
+
+\end{tikzpicture}
+
+
+
+%	
+%	\begin{equation*}
+%	6{\text{CO}}_{2}+6{\text{H}}_{2}\text{O}\to 
+%	\end{equation*}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Early Classification on Remote Sensing Data}
+\input{images/example.tikz}
+
+\url{https://arxiv.org/abs/1901.10681}
+
+\end{frame}
+
+%\input{sections/earlyclassification.tex}
+%
+%\input{sections/breizhCrops.tex}
+%
+%\input{sections/pool.tex}
+
+
+
+\end{document}
+
+
+
